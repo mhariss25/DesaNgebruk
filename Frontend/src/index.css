@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.prose figure.image-style-side {
+  /* Contoh: buat gambar menjadi floating ke kanan */
+  float: right;
+  margin-left: 1rem;
+  width: 50%; /* atau ukuran yang Anda inginkan */
+}
+
+.prose figure.image-style-side img {
+  width: 100%;
+  height: auto;
+}
+
+.prose figure.image-style-side figcaption {
+  /* Styling untuk caption */
+}
+
+figure.image-style-side p {
+  /* Sesuaikan dengan kebutuhan Anda */
+  margin: 0; /* Hilangkan margin */
+  padding: 10px; /* Tambahkan padding sesuai kebutuhan */
+  font-size: 16px; /* Sesuaikan ukuran font */
+  line-height: 1.5; /* Sesuaikan line-height */
+}
+
+/* Style the <figure> element */
+figure.image {
+  /* Set a maximum width for the figure */
+  max-width: 100%; /* Adjust this as needed */
+
+  /* Center the figure horizontally */
+  margin-left: auto;
+  margin-right: auto;
+
+  /* Calculate the height based on the aspect ratio */
+  /* Example: 974/709 * 100% = 137.15% */
+  /* padding-bottom: calc(974 / 709 * 100%); */
+}
+
+.footerClass {
+  padding: 10px 0; /* Mengurangi padding atas dan bawah */
+}
+
+.footerClass img {
+  height: auto; /* Atur ukuran gambar */
+  max-height: 50px; /* Contoh: batasi tinggi maksimal gambar */
+}
+
+.footerClass ul {
+  margin-bottom: 0; /* Mengurangi margin */
+}
+
+.footerClass li {
+  margin-right: 10px; /* Mengurangi margin kanan pada setiap item */
+}
+
+.footerClass span,
+.footerClass a {
+  font-size: 14px; /* Mengurangi ukuran font */
+}
+
+/* .ck-content > blockquote,
+.ck-content > dl,
+.ck-content > dd,
+.ck-content > h1,
+.ck-content > h2,
+.ck-content > h3,
+.ck-content > h4,
+.ck-content > h5,
+.ck-content > h6,
+.ck-content > hr,
+.ck-content > figure,
+.ck-content > p,
+.ck-content > pre {
+  margin: revert;
+}
+
+.ck-content > ol,
+.ck-content > ul {
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+}
+
+.ck-content > table {
+  border-collapse: revert;
+}
+
+.ck-content > h1,
+.ck-content > h2,
+.ck-content > h3,
+.ck-content > h4,
+.ck-content > h5,
+.ck-content > h6 {
+  font-size: revert;
+  font-weight: revert;
+}
+
+.ck-content ul,
+.ck-content ol {
+  list-style: disc inside !important;
+} */

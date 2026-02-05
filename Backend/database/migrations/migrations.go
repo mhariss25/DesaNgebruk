@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/agnarbriantama/DesaNgembruk-Backend/database"
-	"github.com/agnarbriantama/DesaNgembruk-Backend/models"
+	"DesaNgebruk/database"
+	"DesaNgebruk/models"
 )
 
 func MigrationTable() {

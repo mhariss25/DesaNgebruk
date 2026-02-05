@@ -1,6 +1,6 @@
 package response
 
-import "github.com/agnarbriantama/DesaNgembruk-Backend/models"
+import "DesaNgebruk/models"
 
 type BloggerResponse struct {
 	Blogger      models.Blogger `json:"blogger"`

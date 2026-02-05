@@ -5,10 +5,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/agnarbriantama/DesaNgembruk-Backend/database"
-	"github.com/agnarbriantama/DesaNgembruk-Backend/models"
-	"github.com/agnarbriantama/DesaNgembruk-Backend/models/request"
-	"github.com/agnarbriantama/DesaNgembruk-Backend/utils"
+	"DesaNgebruk/database"
+	"DesaNgebruk/models"
+	"DesaNgebruk/models/request"
+	"DesaNgebruk/utils"
+
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
 )

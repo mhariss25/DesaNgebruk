@@ -1,74 +1,63 @@
 package controller
 
 import (
-	"context"
+	"os"
+	"path/filepath"
 	"time"
 
-	"github.com/agnarbriantama/DesaNgembruk-Backend/database"
-	"github.com/agnarbriantama/DesaNgembruk-Backend/models"
-	"github.com/agnarbriantama/DesaNgembruk-Backend/utils/awsutils"
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"DesaNgebruk/database"
+	"DesaNgebruk/models"
+
 	"github.com/gofiber/fiber/v2"
 )
 
 func UploadImages(c *fiber.Ctx) error {
-	cfg, err := config.LoadDefaultConfig(context.TODO(),
-		config.WithRegion("ap-southeast-2")) // Ganti dengan region AWS Anda
-	if err != nil {
-		return err
-	}
-
-	s3Client := s3.NewFromConfig(cfg)
-
 	form, err := c.MultipartForm()
 	if err != nil {
-		return err
+		return c.Status(400).JSON(fiber.Map{"error": "Failed to parse multipart form", "details": err.Error()})
 	}
 
 	files := form.File["images"]
-	presignedURLs := make([]string, 0)
+	if len(files) == 0 {
+		return c.Status(400).JSON(fiber.Map{"error": "images is required"})
+	}
+
+	// pastikan folder ada
+	if err := os.MkdirAll("./uploads", 0755); err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to create uploads folder", "details": err.Error()})
+	}
+
+	base := c.BaseURL()
+	urls := make([]string, 0, len(files))
 
 	for _, file := range files {
-		// Proses setiap file
-		content, err := file.Open()
-		if err != nil {
-			return err
-		}
-		defer content.Close()
-
 		uniqueFilename := generateUniqueFilename(file.Filename)
-		_, err = s3Client.PutObject(context.TODO(), &s3.PutObjectInput{
-			Bucket: aws.String("desa-ngebruk"),
-			Key:    aws.String(uniqueFilename),
-			Body:   content,
-		})
-		if err != nil {
-			return err
+		dst := filepath.Join("uploads", uniqueFilename)
+
+		// simpan file ke disk
+		if err := c.SaveFile(file, dst); err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "Failed to save file", "details": err.Error()})
 		}
 
-		// Generate presigned URL
-		presignedURL, err := awsutils.GeneratePublicURL("desa-ngebruk", uniqueFilename)
-		if err != nil {
-			return err
-		}
-
-		// Simpan info gambar di MySQL
+		// simpan info gambar ke MySQL
 		img := models.Gambar{
 			OriginalName: file.Filename,
-			Path:         uniqueFilename,
+			Path:         uniqueFilename, // simpan nama file saja
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
 		}
 		if err := database.DB.Create(&img).Error; err != nil {
-			return err
+			return c.Status(500).JSON(fiber.Map{"error": "Failed to save image to DB", "details": err.Error()})
 		}
 
-		// Tambahkan presigned URL ke slice
-		presignedURLs = append(presignedURLs, presignedURL)
+		// url yang bisa diakses frontend
+		urls = append(urls, base+"/uploads/"+uniqueFilename)
 	}
 
-	// Berikan respons dengan presigned URLs
-	return c.JSON(fiber.Map{"message": "Images uploaded successfully", "presigned_urls": presignedURLs})
+	return c.JSON(fiber.Map{
+		"message":        "Images uploaded successfully",
+		"urls":           urls,
+		"presigned_urls": urls, // biar FE lama tetap jalan
+	})
+
 }

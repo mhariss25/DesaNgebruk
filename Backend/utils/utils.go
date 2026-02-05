@@ -6,8 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/agnarbriantama/DesaNgembruk-Backend/database"
-	"github.com/agnarbriantama/DesaNgembruk-Backend/models"
+	"DesaNgebruk/database"
+	"DesaNgebruk/models"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )

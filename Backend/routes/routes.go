@@ -1,7 +1,8 @@
 package routes
 
 import (
-	"github.com/agnarbriantama/DesaNgembruk-Backend/controller"
+	"DesaNgebruk/controller"
+
 	"github.com/gofiber/fiber/v2"
 )
 
